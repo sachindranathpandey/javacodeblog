@@ -294,50 +294,64 @@
 
 	<!-- Main Content of Body -->
 
-	<article class="hentry">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<!-- Your main post content goes here -->
+				<div class="card">
+					<div class="card-body">
+						<!-- Your main post content -->
+						<article class="hentry">
 
-		<div class="featured-image">
-			<img src="pics/defaultpost.png" class="card-img-top" alt="...">
-		</div>
-		<h1 class="entry-title"><%=post.getPtitle()%></h1>
-		<div class="entry-meta">
-			<%
-			String name = dao.getUserNameByID(post.getUserId());
-			%>
-			<p>
-				<span class="author">Written by <a href="#"><%=name%></a></span> <span
-					class="date"><%=post.getPdate()%></span>
-			</p>
-		</div>
-		<div class="entry-content">
+							<div class="featured-image">
+								<img src="pics/defaultpost.png" class="card-img-top" alt="...">
+							</div>
+							<h1 class="entry-title"><%=post.getPtitle()%></h1>
+							<div class="entry-meta">
+								<%
+								String name = dao.getUserNameByID(post.getUserId());
+								%>
+								<p>
+									<span class="author">Written by <a href="#"><%=name%></a></span>
+									<span class="date"><%=post.getPdate()%></span>
+								</p>
+							</div>
+							<div class="entry-content">
 
-			<%=post.getPcontent()%>
-		</div>
+								<%=post.getPcontent()%>
+							</div>
 
-		<div class="entry-content">
+							<div class="entry-content">
 
-			<%=post.getPcode()%>
-		</div>
-		<%
-			LikeDao likeDao=new LikeDao(ConnectionProvider.getConnection());
-		
-			int totalLikes=likeDao.countLikeOnPost(post.getPid());
-		%>
-		<div class="card-footer primary-background ">
+								<%=post.getPcode()%>
+							</div>
+							<%
+							LikeDao likeDao = new LikeDao(ConnectionProvider.getConnection());
 
-			<a class="btn btn-outline-light btn-sm"><i
-				class="fa fa-thumbs-o-up" onclick="doLIke(<%=post.getPid() %>,<%=user.getId() %>)"> <span class="like-counter"><%=totalLikes %></span>
-			</i> </a> <a href="#" class="btn btn-outline-light btn-sm"><i
-				class="fa fa-commenting-o"> <span>23</span>
-			</i> </a>
+							int totalLikes = likeDao.countLikeOnPost(post.getPid());
+							%>
+							<div class="card-footer primary-background ">
+
+								<a class="btn btn-outline-light btn-sm"><i
+									class="fa fa-thumbs-o-up"
+									onclick="doLIke(<%=post.getPid()%>,<%=user.getId()%>)"> <span
+										class="like-counter"><%=totalLikes%></span>
+								</i> </a> <a href="#" class="btn btn-outline-light btn-sm"><i
+									class="fa fa-commenting-o"> <span>23</span>
+								</i> </a>
+							</div>
+
+
+
+
+
+
+						</article>
+					</div>
+				</div>
+			</div>
 		</div>
-		
-		
-		
-		
-		
-		
-	</article>
+	</div>
 	<!-- Main Content of Body Ends Here -->
 	<script type="text/javascript" src="js/myjs.js"></script>
 	<script
