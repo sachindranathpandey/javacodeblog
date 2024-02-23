@@ -1,3 +1,4 @@
+<%@page import="com.tech.blog.dao.LikeDao"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.dao.PostDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -28,17 +29,20 @@
 
 <title>Insert title here</title>
 
-	<style type="text/css">
-	
-		.post-title{
-			font-weight: 100;
-			font-size: 30px;
-		}
-		.post-content{
-			font-weight: 100;
-			font-size: 20px;
-		}
-	</style>
+<style type="text/css">
+.post-title {
+	font-weight: 100;
+	font-size: 30px;
+}
+
+.post-content {
+	font-weight: 100;
+	font-size: 20px;
+}
+</style>
+
+
+
 </head>
 <body>
 
@@ -289,33 +293,53 @@
 
 
 	<!-- Main Content of Body -->
-	
-		<article class="hentry">
 
-  <div class="featured-image">
-    	<img src="pics/defaultpost.png" class="card-img-top" alt="...">
-  </div>
-   <h1 class="entry-title"><%= post.getPtitle() %></h1>
-  <div class="entry-meta">
-  	<%
-  		
-  		String name =dao.getUserNameByID(post.getUserId());
-  	%>
-    <p><span class="author">Written by <a href="#"><%=name %></a></span> <span class="date"><%= post.getPdate() %></span></p>
-  </div>
-  <div class="entry-content">
-   
-    	<%= post.getPcontent() %>
-  </div>
-  
-  <div class="entry-content">
-   
-    	<%= post.getPcode() %>
-  </div>
-  <footer class="entry-footer"><p>Credit: <a href="https://javadsa.com/">javadsa.com</p></footer>
-</article>
+	<article class="hentry">
+
+		<div class="featured-image">
+			<img src="pics/defaultpost.png" class="card-img-top" alt="...">
+		</div>
+		<h1 class="entry-title"><%=post.getPtitle()%></h1>
+		<div class="entry-meta">
+			<%
+			String name = dao.getUserNameByID(post.getUserId());
+			%>
+			<p>
+				<span class="author">Written by <a href="#"><%=name%></a></span> <span
+					class="date"><%=post.getPdate()%></span>
+			</p>
+		</div>
+		<div class="entry-content">
+
+			<%=post.getPcontent()%>
+		</div>
+
+		<div class="entry-content">
+
+			<%=post.getPcode()%>
+		</div>
+		<%
+			LikeDao likeDao=new LikeDao(ConnectionProvider.getConnection());
+		
+			int totalLikes=likeDao.countLikeOnPost(post.getPid());
+		%>
+		<div class="card-footer primary-background ">
+
+			<a class="btn btn-outline-light btn-sm"><i
+				class="fa fa-thumbs-o-up" onclick="doLIke(<%=post.getPid() %>,<%=user.getId() %>)"> <span class="like-counter"><%=totalLikes %></span>
+			</i> </a> <a href="#" class="btn btn-outline-light btn-sm"><i
+				class="fa fa-commenting-o"> <span>23</span>
+			</i> </a>
+		</div>
+		
+		
+		
+		
+		
+		
+	</article>
 	<!-- Main Content of Body Ends Here -->
-
+	<script type="text/javascript" src="js/myjs.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
