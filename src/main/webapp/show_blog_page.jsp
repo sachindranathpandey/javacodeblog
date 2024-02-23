@@ -21,11 +21,24 @@
 	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
 	crossorigin="anonymous">
 <link href="css/mystyle.css" rel="stylesheet">
+<link href="css/sh" rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="css/test.css" rel="stylesheet">
 
 <title>Insert title here</title>
+
+	<style type="text/css">
+	
+		.post-title{
+			font-weight: 100;
+			font-size: 30px;
+		}
+		.post-content{
+			font-weight: 100;
+			font-size: 20px;
+		}
+	</style>
 </head>
 <body>
 
@@ -276,46 +289,32 @@
 
 
 	<!-- Main Content of Body -->
-	<div class="container ">
-		
-		<div class="row my-4 d-flex justify-content-center ">
 	
-			<div class="col-md-8 off-set-md-2">
-			<img src="pics/defaultpost.png" class="card-img-top" alt="...">
-				<div class="card ">
-					
-					<div class="card-header">
-					
-						<h4>
-							<%=post.getPtitle()%>
-						</h4>
-					</div>
+		<article class="hentry">
 
-					<div class="card-body">
-						<p>
-							<%=post.getPcontent()%>
-						</p>
-						<br> <br>
-						<pre><%=post.getPcode()%></pre>
-					</div>
-
-					<div class="card-footer">
-						<div class="card-footer primary-background  ">
-							 <a
-								href="#" class="btn btn-outline-light btn-sm"><i
-								class="fa fa-thumbs-o-up"> <span>2</span>
-							</i> </a> <a href="#" class="btn btn-outline-light btn-sm"><i
-								class="fa fa-commenting-o"> <span>23</span>
-							</i> </a>
-						</div>
-					</div>
-				</div>
-
-
-			</div>
-		</div>
-	</div>
-
+  <div class="featured-image">
+    	<img src="pics/defaultpost.png" class="card-img-top" alt="...">
+  </div>
+   <h1 class="entry-title"><%= post.getPtitle() %></h1>
+  <div class="entry-meta">
+  	<%
+  		
+  		String name =dao.getUserNameByID(post.getUserId());
+  	%>
+    <p><span class="author">Written by <a href="#"><%=name %></a></span> <span class="date"><%= post.getPdate() %></span></p>
+  </div>
+  <div class="entry-content">
+   
+    	<%= post.getPcontent() %>
+  </div>
+  
+  <div class="entry-content">
+   
+    	<%= post.getPcode() %>
+  </div>
+  <footer class="entry-footer"><p>Credit: <a href="https://javadsa.com/">javadsa.com</p></footer>
+</article>
+	<!-- Main Content of Body Ends Here -->
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

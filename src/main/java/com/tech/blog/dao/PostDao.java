@@ -81,29 +81,27 @@ public class PostDao {
 			String query = "select * from post order by pdate DESC";
 			PreparedStatement psmt = con.prepareStatement(query);
 			ResultSet rs = psmt.executeQuery();
-			 InputStream inputStream = null;
-			while(rs.next()) {
-				
+			InputStream inputStream = null;
+			while (rs.next()) {
+
 				int pid = rs.getInt("pid");
 				String ptitle = rs.getString("ptitle");
 				String pcontent = rs.getString("pcontent");
 				String pcode = rs.getString("pcode");
 				inputStream = rs.getBinaryStream("ppic");
-				int catid=rs.getInt("catid");
-				int userid=rs.getInt("userid");
-				Timestamp date=rs.getTimestamp("pdate");
-				
-				Post post=new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
+				int catid = rs.getInt("catid");
+				int userid = rs.getInt("userid");
+				Timestamp date = rs.getTimestamp("pdate");
+
+				Post post = new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
 				list.add(post);
-			}	
-		
+			}
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
 		return list;
-	
 
 	}
 
@@ -120,20 +118,19 @@ public class PostDao {
 			psmt.setInt(1, catid);
 			ResultSet rs = psmt.executeQuery();
 			InputStream inputStream = null;
-			while(rs.next()) {
-				
+			while (rs.next()) {
+
 				int pid = rs.getInt("pid");
 				String ptitle = rs.getString("ptitle");
 				String pcontent = rs.getString("pcontent");
 				String pcode = rs.getString("pcode");
 				inputStream = rs.getBinaryStream("ppic");
-				int userid=rs.getInt("userid");
-				Timestamp date=rs.getTimestamp("pdate");
-				
-				Post post=new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
+				int userid = rs.getInt("userid");
+				Timestamp date = rs.getTimestamp("pdate");
+
+				Post post = new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
 				list.add(post);
-			}	
-		
+			}
 
 		} catch (Exception e) {
 
@@ -141,35 +138,61 @@ public class PostDao {
 		}
 		return list;
 	}
-	
+
 	public Post getPostByPostId(int post_id) {
-		
-		Post post=null;
-			try {
-				Connection con = ConnectionProvider.getConnection();
-				String query = "select * from post where pid=?";
-				PreparedStatement psmt = con.prepareStatement(query);
-				psmt.setInt(1, post_id);
-				ResultSet rs = psmt.executeQuery();
-				InputStream inputStream = null;
-				while(rs.next()) {
-					
-					int pid = rs.getInt("pid");
-					String ptitle = rs.getString("ptitle");
-					String pcontent = rs.getString("pcontent");
-					String pcode = rs.getString("pcode");
-					inputStream = rs.getBinaryStream("ppic");
-					int catid=rs.getInt("catid");
-					int userid=rs.getInt("userid");
-					Timestamp date=rs.getTimestamp("pdate");
-					
-				  post=new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
-					
-				}	
-				
-			}catch(Exception e) {
-				e.printStackTrace();
+
+		Post post = null;
+		try {
+			Connection con = ConnectionProvider.getConnection();
+			String query = "select * from post where pid=?";
+			PreparedStatement psmt = con.prepareStatement(query);
+			psmt.setInt(1, post_id);
+			ResultSet rs = psmt.executeQuery();
+			InputStream inputStream = null;
+			while (rs.next()) {
+
+				int pid = rs.getInt("pid");
+				String ptitle = rs.getString("ptitle");
+				String pcontent = rs.getString("pcontent");
+				String pcode = rs.getString("pcode");
+				inputStream = rs.getBinaryStream("ppic");
+				int catid = rs.getInt("catid");
+				int userid = rs.getInt("userid");
+				Timestamp date = rs.getTimestamp("pdate");
+
+				post = new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
+
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return post;
+	}
+
+	public String getUserNameByID(int userid) {
+
+		String name = null;
+
+		try {
+			Connection con = ConnectionProvider.getConnection();
+			String query = "select name from user where id=?";
+			PreparedStatement psmt = con.prepareStatement(query);
+			psmt.setInt(1, userid);
+			ResultSet rs = psmt.executeQuery();
+			while (rs.next()) {
+
+			
+
+				name=rs.getString("name");
+
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+
+			e.printStackTrace();
+		}
+		return name;
 	}
 }

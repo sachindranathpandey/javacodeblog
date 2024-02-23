@@ -11,9 +11,13 @@ public class Main {
 		
 		
 		UserDao dao=new UserDao(ConnectionProvider.getConnection());
+		PostDao postDao=new PostDao(ConnectionProvider.getConnection());
+		String name = postDao.getUserNameByID(6);
+		System.out.println("posted by" + name);
 		
 		try {
 			boolean checkUserInDb = dao.checkUserInDb("pranav@gmail.com");
+			 
 			System.out.println(checkUserInDb);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
