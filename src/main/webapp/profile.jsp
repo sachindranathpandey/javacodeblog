@@ -45,7 +45,7 @@
 		response.sendRedirect("login.jsp");
 	}
 	%>
-
+<!-- Start of Nav Bar -->
 	<nav class="navbar navbar-expand-lg navbar-dark  primary-background">
 		<div class="container-fluid ">
 			<span style="margin-right: 40px"><i

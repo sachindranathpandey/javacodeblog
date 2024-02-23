@@ -119,7 +119,7 @@ public class PostDao {
 			PreparedStatement psmt = con.prepareStatement(query);
 			psmt.setInt(1, catid);
 			ResultSet rs = psmt.executeQuery();
-			 InputStream inputStream = null;
+			InputStream inputStream = null;
 			while(rs.next()) {
 				
 				int pid = rs.getInt("pid");
@@ -140,5 +140,36 @@ public class PostDao {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public Post getPostByPostId(int post_id) {
+		
+		Post post=null;
+			try {
+				Connection con = ConnectionProvider.getConnection();
+				String query = "select * from post where pid=?";
+				PreparedStatement psmt = con.prepareStatement(query);
+				psmt.setInt(1, post_id);
+				ResultSet rs = psmt.executeQuery();
+				InputStream inputStream = null;
+				while(rs.next()) {
+					
+					int pid = rs.getInt("pid");
+					String ptitle = rs.getString("ptitle");
+					String pcontent = rs.getString("pcontent");
+					String pcode = rs.getString("pcode");
+					inputStream = rs.getBinaryStream("ppic");
+					int catid=rs.getInt("catid");
+					int userid=rs.getInt("userid");
+					Timestamp date=rs.getTimestamp("pdate");
+					
+				  post=new Post(pid, ptitle, pcontent, pcode, inputStream, date, catid, userid);
+					
+				}	
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		return post;
 	}
 }
