@@ -1,4 +1,10 @@
 <!doctype html>
+<%@page import="com.tech.blog.dao.PostDao"%>
+<%@page import="com.tech.blog.dao.LikeDao"%>
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
+<%@page import="com.tech.blog.dao.PostDao"%>
+<%@page import="com.tech.blog.entities.*"%>
+<%@page import="java.util.*"%>
 <html lang="en">
 <head>
 <!-- Required meta tags -->
@@ -17,18 +23,15 @@
 <link href="css/mystyle.css" rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	
-	<style type="text/css">
-		.banner-backfound{
-			clip-path: polygon(50% 0%, 100% 0, 100% 86%, 75% 100%, 23% 92%, 0 100%, 0 0);
-			
-			background-image: url("images/bghead1.jpg");
-			
-		    background-repeat: no-repeat;
-		    background-size: 100%;
 
-		}
-	</style>
+<style type="text/css">
+.banner-backfound {
+	clip-path: polygon(50% 0%, 100% 0, 100% 86%, 75% 100%, 23% 92%, 0 100%, 0 0);
+	background-image: url("images/bghead1.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+</style>
 </head>
 <body>
 	<%@ include file="normal_navbar.jsp"%>
@@ -61,10 +64,8 @@
 				<a type="button" class="btn btn-warning center" href="signup.jsp">
 
 					<i class="fa fa-plus-circle"></i> Start..its Free
-				</a>
-
-				<a type="button" class="btn btn-success" href="login.jsp">
-					<i class="fa fa-user-circle fa-spin"></i> Login
+				</a> <a type="button" class="btn btn-success" href="login.jsp"> <i
+					class="fa fa-user-circle fa-spin"></i> Login
 				</a>
 
 			</div>
@@ -75,97 +76,45 @@
 
 	</div>
 
+	<%
+	PostDao dao = new PostDao(ConnectionProvider.getConnection());
+	List<Post> list = dao.getAllPosts();
+	%>
 
 	<div class="container-fluid ">
 
 		<!-- Card Body -->
-		<div class="container mt-5 text-dark">
-			<div class="row">
-				<div class="col-sm">
+		<div class="row">
 
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
+			<%
+			for (Post p : list) {
+			%>
+			<div class="col-lg-4 col-md-6 mb-4">
+				<div class="card h-100">
+					<img class="card-img-top" src="" alt="">
+					<div class="card-body">
+						
+						<h4 class="card-title"> <%= p.getPtitle() %></h4>
+						<div>
+							<h6 class="text-primary">Written By: <%=dao.getUserNameByID(p.getUserId()) %> </h6>
+							<i class="text-primary">Date: <%=p.getPdate() %>  </i>
 						</div>
+						<p class="card-text"><%=p.getPcontent() %></p>
+						<a href="login.jsp" class="btn btn-outline-dark text-primary btn-sm">Read more...</a>
 					</div>
-
-				</div>
-				<div class="col-sm">
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm">
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
-						</div>
-					</div>
+					
 				</div>
 			</div>
+
+			<%
+			}
+			%>
+
 
 			<!-- Card Body Ends Here -->
 
 
 		</div>
-
-
-		<div class="container mt-5 text-dark">
-			<div class="row">
-				<div class="col-sm">
-
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
-						</div>
-					</div>
-
-				</div>
-				<div class="col-sm">
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm">
-					<div class="card" style="width: 18rem;">
-						<div class="card-body">
-							<h5 class="card-title">Card title</h5>
-							<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-							<p class="card-text">Some quick example text to build on the
-								card title and make up the bulk of the card's content.</p>
-							<a href="#" class="btn btn-info">Read More...</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Card Body Ends Here -->
-		</div>
-
 
 	</div>
 
