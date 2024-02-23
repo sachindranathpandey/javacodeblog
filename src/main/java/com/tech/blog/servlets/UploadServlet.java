@@ -1,11 +1,12 @@
 package com.tech.blog.servlets;
-
+import com.tech.blog.entities.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 import java.io.File;
@@ -15,9 +16,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import org.apache.commons.io.output.ProxyOutputStream;
+
+import com.tech.blog.dao.PostDao;
+import com.tech.blog.entities.User;
+import com.tech.blog.helper.ConnectionProvider;
 
 
-@WebServlet("/multitest")
+@WebServlet("/UploadServlet")
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,59 +35,36 @@ public class UploadServlet extends HttpServlet {
 	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-       // response.setContentType("text/html;charset=UTF-8");
-
-        // Create path components to save the file
-       // final String path = "D://postimg";
-        final String path=request.getServletContext().getRealPath("/")+"pics";
+		PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=UTF-8");
+        if(request.getParameter("cid")==null) {
+        	out.print("selectoption");
+        	return;
+        }
+		final String path=request.getServletContext().getRealPath("/")+"pics";
         final Part filePart = request.getPart("file");
-        final String fileName = filePart.getSubmittedFileName();
+        int cid=Integer.parseInt(request.getParameter("cid"));
+        String ptitle=request.getParameter("ptitle");
+        String pcontent=request.getParameter("pcontent");
+        String pcode=request.getParameter("pcode");
+        InputStream inputStream = null;
+        HttpSession session=request.getSession();
+        User user= (User) session.getAttribute("currentUser");
+        Connection con=ConnectionProvider.getConnection();
+        PostDao dao=new  PostDao(con);	
+       
+        inputStream = filePart.getInputStream();
         
-        System.out.println(fileName);
-        OutputStream out = null;
-        InputStream filecontent = null;
-        final PrintWriter writer = response.getWriter();
-
-        try {
-            out = new FileOutputStream(new File(path + File.pathSeparator + fileName));
-            filecontent = filePart.getInputStream();
-
-            int read;
-            final byte[] bytes = new byte[1024];
-
-            while ((read = filecontent.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            writer.println("New file " + fileName + " created at " + path);
-        } catch (FileNotFoundException fne) {
-            writer.println("You either did not specify a file to upload or are "
-                    + "trying to upload a file to a protected or nonexistent "
-                    + "location.");
-            writer.println("<br/> ERROR: " + fne.getMessage());
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-            if (filecontent != null) {
-                filecontent.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
+        Post post=new Post(ptitle, pcontent, pcode, inputStream,null,cid, user.getId());
+        boolean savePost = dao.savePost(post, post.getPpic());
+       
+      
+        if(savePost) {
+        	
+        	out.println("success");
+        	
+        }else {
+        	out.println("error");
         }
     }
-
-    private String getFileName(final Part part) {
-        final String partHeader = part.getHeader("content-disposition");
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(
-                        content.indexOf('=') + 1).trim().replace("\"", "");
-            }
-        }
-        return null;
-    }
-
-
 }

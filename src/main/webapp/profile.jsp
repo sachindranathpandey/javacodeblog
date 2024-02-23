@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
-	pageEncoding="ISO-8859-1"  %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="java.sql.Connection"%>
 <%@page import="com.tech.blog.entities.Category"%>
@@ -33,6 +33,7 @@
 <link href="css/test.css" rel="stylesheet">
 
 <title>Create Post</title>
+
 </head>
 <body>
 
@@ -47,8 +48,6 @@
 
 	<nav class="navbar navbar-expand-lg navbar-dark  primary-background">
 		<div class="container-fluid ">
-
-
 			<span style="margin-right: 40px"><i
 				class="fa fa-stack-overflow" style="font-size: 48px; color: red"></i></span>
 			<a class="navbar-brand" href="index.jsp">JavaBlog</a>
@@ -120,8 +119,51 @@
 	</nav>
 
 
-	<!-- End of Nav Bar -->
 
+
+
+	<!-- End of Nav Bar -->
+	<!-- Start left navigation -->
+	<div class="container">
+
+		<div class="row mt-4">
+
+			<div class="col-md-4">
+				<ul class="list-group"  id="myList">
+					<a href=# class="list-group-item list-group-item-action active" onclick="getPosts(<%= 0%>)" >All Posts</a>
+
+					<%
+					
+					PostDao dao = new PostDao(ConnectionProvider.getConnection());
+					ArrayList<Category> cat = dao.getAllCategories();
+
+					for (Category c : cat) {
+					%>
+						
+						<a href=#  onclick="getPosts(<%=c.getCid()%>)" class="list-group-item list-group-item-action"><%=c.getName()%></a>
+						
+					<%
+					}
+					%>
+					
+
+				</ul>
+			</div>
+			<div class="col-md-8" >
+			
+				<div class="container text-center" id="loader">
+					<i class=" fa fa-refresh fa-4x fa-spin"></i>
+					<h4 class="margin-top:3px">Loading...</h4>
+				</div>
+				
+				<div class="fluid-container" id="post-container">
+					
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Start Right navigation -->
 	<!-- ----------------------------------------------------------------------->
 
 
@@ -287,23 +329,21 @@
 				</div>
 				<div class="modal-body">
 
-					<form method="post" action="testpost" id="add-post-form"
+					<form method="post" action="UploadServlet" id="add-post-form"
 						enctype="multipart/form-data">
 
 
 						<div class="form-group">
 
 							<select class="form-control" name="cid">
-								<option selected disabled="disabled">--Select
-									Category--</option>
+								<option value="" selected disabled>--Select Category--</option>
 								<%
-								PostDao dao = new PostDao(ConnectionProvider.getConnection());
-								ArrayList<Category> cat = dao.getAllCategories();
+								PostDao dao2 = new PostDao(ConnectionProvider.getConnection());
+								ArrayList<Category> cat2 = dao2.getAllCategories();
 
-								for (Category c : cat) {
+								for (Category c : cat2) {
 								%>
-								<option>
-									<%=c.getName()%></option>
+								<option value="<%=c.getCid()%>"><%=c.getName()%></option>
 								<%
 								}
 								%>
@@ -331,12 +371,13 @@
 						<br>
 						<div class="form-group">
 
-							<span>Choose Image</span>&nbsp <input type="file" name="pic"
+							<span>Choose Image</span>&nbsp <input type="file" name="file"
 								class="form-control">
 						</div>
 						<br>
 						<div class="container text-center">
-							<button type="submit" class="btn btn-outline-success">Save</button>
+							<button type="submit" class="btn btn-outline-success"
+								id="uploadButton">Save</button>
 						</div>
 					</form>
 
@@ -371,57 +412,10 @@
 
 
 
-	<!-- add post script -->
+	<!-- insert post script -->
 
-	<script type="text/javascript">
-		var frm = $('#add-post-form');
 
-		frm.submit(function(e) {
-
-			e.preventDefault();
-
-			$.ajax({
-				type : frm.attr('method'),
-				url : frm.attr('action'),
-				
-	            data: frm.serialize(),
-				success : function(data) {
-					// console.log('Submission was successful.');
-					console.log(data);
-					
-					/* $("#submit-btn").show();
-					$("#loader").hide(); */
-					if (data.trim() == 'success') {
-
-						Swal.fire({
-							position : "center",
-							icon : "success",
-							title : "Post saved successfully",
-							showConfirmButton : false,
-							timer : 2000
-
-						});
-					}else {
-						Swal.fire({
-							icon : "error",
-							title : "Oops...",
-							text : "Opps! Data save  Faild",
-
-						});
-					}
-
-				},
-				error : function(data) {
-					console.log(data);
-					
-
-				},
-
-			});
-
-		});
-	</script>
-	<!-- end post script -->
+	<!-- end insert post script -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -437,6 +431,116 @@
 		
 	</script>
 
+
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+	<script>
+		$(document).ready(function(e) {
+
+			$("#add-post-form").on("submit", function(event) {
+
+				// this code gets called when form is submitted
+
+				event.preventDefault();
+
+				let form = new FormData(this);
+
+				//console.log(form);
+				// Now requestiong to server
+				$.ajax({
+					url : "UploadServlet",
+					type : 'POST',
+					data : form,
+					success : function(data, textStatus, jqXHR) {
+						// success
+						console.log("data is " + data);
+
+						if (data.trim() == 'success') {
+							Swal.fire({
+								title : "Good job!",
+								text : "Your Post is successfully saved",
+								icon : "success"
+							});
+						} else if (data.trim() == 'selectoption') {
+							Swal.fire({
+								icon : "error",
+								title : "Oops...",
+								text : "You did not select category option",
+
+							});
+						} else {
+							Swal.fire({
+								icon : "error",
+								title : "Oops...",
+								text : "Faileds",
+
+							});
+						}
+
+					},
+
+					error : function(jqXHR, textStatus, errorThrown) {
+						// error
+						console.log("failed")
+					},
+
+					processData : false,
+					contentType : false
+				})
+
+			})
+
+		});
+	</script>
+	
+	
+	<!-- Script for load posts -->
+	<script>
+	
+	function getPosts(catId) {
+		$("#loader").show();
+		$("#post-container").hide();
+		$.ajax({
+			
+			url:"load_posts.jsp",
+			data:{cid:catId},
+		    success : function(data, textStatus, jqXHR){
+			$("#loader").hide();
+			$("#post-container").show();
+			$("#post-container").html(data);
+		},
+		})
+		
+	}
+		$(document).ready(function(e){
+			
+			getPosts(0);
+		});
+	
+	</script>
+	<!-- End of Script for load posts -->
+	
+	<!-- Make link active -->
+	
+	
+	
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+	    var links = document.querySelectorAll("#myList a");
+
+	    links.forEach(function(link) {
+	        link.addEventListener("click", function(event) {
+	            event.preventDefault(); // Prevent the default action of the link
+	            var activeLink = document.querySelector("#myList a.active");
+	            if (activeLink) {
+	                activeLink.classList.remove("active"); // Remove active class from previously active link
+	            }
+	            link.classList.add("active"); // Add active class to the clicked link
+	        });
+	    });
+	});
+	</script>
+
 </body>
 </html>

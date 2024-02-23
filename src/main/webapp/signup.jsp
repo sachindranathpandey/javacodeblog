@@ -129,8 +129,7 @@
             url: frm.attr('action'),
             data: frm.serialize(),
             success: function (data) {
-               // console.log('Submission was successful.');
-               console.log(data);
+             
                 $("#submit-btn").show();
             	$("#loader").hide();
             	if(data.trim()=='success'){

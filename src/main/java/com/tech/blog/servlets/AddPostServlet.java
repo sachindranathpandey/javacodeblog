@@ -30,28 +30,11 @@ public class AddPostServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = resp.getWriter();
 		
-		String parameter = req.getParameter("cid");
-		System.out.println(parameter);
-	//	int cid = Integer.parseInt(req.getParameter("cid"));
-		//System.out.println(req.getParameter("cid"));
-//		String ptitle = req.getParameter("ptitle");
-//		String pcontent = req.getParameter("pcontent");
-//		String pcode = req.getParameter("pcode");
-//		Part part=req.getPart("pic");
-//		
-//		HttpSession session = req.getSession();
-//		User user = (User)session.getAttribute("currentUser");
-//		
-//		String file = part.getSubmittedFileName();
+		//String parameter = req.getParameter("cid");
+		//System.out.println("cid = "+parameter);
 		
-//		Post post=new Post(ptitle, pcontent, pcode, file, null, cid, user.getId());
-//		
-//		PostDao dao=new PostDao(ConnectionProvider.getConnection());
-//		boolean flag = dao.savePost(post);
-//		if (flag) {
-//			out.print("sucess");
-//		}
-//		out.print("error");
+		Part part=req.getPart("pic");
+		System.out.println(part.getSubmittedFileName());
 	}
 
 }

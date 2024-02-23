@@ -26,3 +26,7 @@
 }
 
 
+	#myList a.active {
+    color: white;
+    /* Add your desired styles for active link */
+}

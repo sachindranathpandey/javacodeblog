@@ -40,7 +40,8 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session=req.getSession();
 			session.setAttribute("currentUser", user);
 			
-			resp.sendRedirect("profile.jsp"); 
+			resp.sendRedirect("profile.jsp");
+//			resp.sendRedirect("testpost.jsp");
 			
 		}else {
 			HttpSession s=req.getSession();

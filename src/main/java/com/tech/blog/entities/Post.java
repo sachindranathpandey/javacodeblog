@@ -1,6 +1,9 @@
 package com.tech.blog.entities;
 
+import java.io.InputStream;
 import java.sql.Timestamp;
+
+import com.mysql.cj.jdbc.Blob;
 
 public class Post {
 	
@@ -10,7 +13,7 @@ public class Post {
 	private String ptitle;
 	private String pcontent;
 	private String pcode;
-	private String ppic;
+	private InputStream ppic;
 	private Timestamp pdate;
 	private int catid;
 	private int userId;
@@ -21,7 +24,7 @@ public class Post {
 	}
 
 
-	public Post(int pid, String ptitle, String pcontent, String pcode, String ppic, Timestamp pdate, int catid,int userId) {
+	public Post(int pid, String ptitle, String pcontent, String pcode, InputStream ppic, Timestamp pdate, int catid,int userId) {
 		
 		this.pid = pid;
 		this.ptitle = ptitle;
@@ -34,7 +37,7 @@ public class Post {
 	}
 
 
-	public Post(String ptitle, String pcontent, String pcode, String ppic, Timestamp pdate, int catid,int userId) {
+	public Post(String ptitle, String pcontent, String pcode, InputStream ppic, Timestamp pdate, int catid,int userId) {
 		super();
 		this.ptitle = ptitle;
 		this.pcontent = pcontent;
@@ -86,12 +89,12 @@ public class Post {
 	}
 
 
-	public String getPpic() {
+	public InputStream getPpic() {
 		return ppic;
 	}
 
 
-	public void setPpic(String ppic) {
+	public void setPpic(InputStream ppic) {
 		this.ppic = ppic;
 	}
 

@@ -14,7 +14,7 @@ public class ConnectionProvider {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(URL, USER, PASS);
-			System.out.println("Conn = "+conn);
+			
 			if(conn!=null) {
 				System.out.println("Connected");
 				return conn;
